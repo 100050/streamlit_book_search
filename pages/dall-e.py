@@ -12,9 +12,9 @@ def func(prompt):
     img = Image.open("img.png")
     st.image(img, use_column_width=True)
 
-st.text_input("key", key="key", type="password")
+st.session_state.key = st.text_input("key", value=st.session_state.get("key", ""), type="password")
 st.header("그림 그리기")
-prompt = st.text_input("프롬포트")
+st.session_state.prompt = st.text_input("프롬포트", value=st.session_state.get("prompt", ""))
 
 if st.button("그리기"):
     func(prompt)
