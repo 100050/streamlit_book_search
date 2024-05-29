@@ -14,9 +14,9 @@ def func(prompt):
   )
   st.markdown(response.choices[0].message.content)
 
-st.session_state.key = st.text_input("key", type="password")
+st.session_state.key = st.text_input("key", value=st.session_state.get("key", "") type="password")
 st.header("무엇이든 물어보세요.")
-prompt = st.text_input("질문?")
+prompt = st.text_input("질문?", value=st.session_state.get("key", ""))
 
 if st.button("실행하기"):
   func(prompt)
