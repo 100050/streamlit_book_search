@@ -16,7 +16,7 @@ def func(prompt):
 
 st.session_state.key = st.text_input("key", value=st.session_state.get("key", ""), type="password")
 st.header("무엇이든 물어보세요.")
-st.text_input("질문?")
+st.session_state.prompt = st.text_input("질문?", value=st.session_state.get("prompt", ""))
 
 if st.button("실행하기"):
-  func(prompt)
+  func(st.session_state.prompt)
