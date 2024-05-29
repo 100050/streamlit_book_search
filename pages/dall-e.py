@@ -5,7 +5,7 @@ from PIL import Image
 
 @st.cache_data
 def func(prompt):
-    client = OpenAI(api_key=key)
+    client = OpenAI(api_key=st.session_state.key)
     response = client.images.generate(model="dall-e-3",prompt=prompt)
     image_url = response.data[0].url
     urllib.request.urlretrieve(image_url, 'img.png')
