@@ -4,9 +4,9 @@ import urllib.request
 from PIL import Image
 
 @st.cache_data
-def func(prompt):
+def func():
     client = OpenAI(api_key=st.session_state.key)
-    response = client.images.generate(model="dall-e-3",prompt=prompt)
+    response = client.images.generate(model="dall-e-3",prompt=st.session_state.prompt)
     image_url = response.data[0].url
     urllib.request.urlretrieve(image_url, 'img.png')
     img = Image.open("img.png")
@@ -17,4 +17,4 @@ st.header("그림 그리기")
 st.session_state.prompt = st.text_input("프롬포트", value=st.session_state.get("prompt", ""))
 
 if st.button("그리기"):
-    func(prompt)
+    func()
