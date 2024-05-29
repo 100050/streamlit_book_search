@@ -11,10 +11,9 @@ def func(prompt):
     urllib.request.urlretrieve(image_url, 'img.png')
     img = Image.open("img.png")
     st.image(img, use_column_width=True)
-if st.session_state.key != None:
-    st.session_state.key = st.text_input("key",  type="password")
-else:
-    st.session_state.key = st.text_input("key", st.session_state.key, type="password")
+
+st.session_state.key = ""
+st.session_state.key = st.text_input("key", st.session_state.key, type="password")
 st.header("그림 그리기")
 prompt = st.text_input("프롬포트")
 
