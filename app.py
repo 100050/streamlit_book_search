@@ -3,7 +3,7 @@ from openai import OpenAI
 
 @st.cache_data
 def func():
-  st.markdown(f"질문: {prompt}")
+  st.markdown(f"질문: {st.session_state.prompt}")
   client = OpenAI(api_key=st.session_state.key)
   response = client.chat.completions.create(
     model="gpt-3.5-turbo",
