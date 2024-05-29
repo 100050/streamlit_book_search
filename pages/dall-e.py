@@ -12,9 +12,7 @@ def func(prompt):
     img = Image.open("img.png")
     st.image(img, use_column_width=True)
 
-key = ""
-st.session_state.key = st.text_input("key", key, type="password")
-key = st.session_state.key
+st.session_state.key = st.text_input("key", type="password")
 st.header("그림 그리기")
 prompt = st.text_input("프롬포트")
 
