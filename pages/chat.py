@@ -10,11 +10,14 @@ st.header("챗봇")
 if st.button("Clear") and "thread" in st.session_state:
     del st.session_state.messages
     st.session_state.client.beta.threads.delete(st.session_state.thread.id)
+    del st.session_state.thread
 
 if st.button("대화창 나가기") and "thread" in st.session_state and "assistant" in st.session_state:
     del st.session_state.messages
     st.session_state.client.beta.threads.delete(st.session_state.thread.id)
     st.session_state.client.beta.assistants.delete(st.session_state.assistant.id)
+    del st.session_state.thread
+    del st.session_state.assistant
 
 if "messages" not in st.session_state:     
     st.session_state.messages = [] 
