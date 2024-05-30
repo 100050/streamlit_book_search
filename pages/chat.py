@@ -46,7 +46,7 @@ if prompt := st.chat_input("What is up?"):
             ]
         )
     run = client.beta.threads.runs.create_and_poll( # 1초에 1회 호출 (분당 100회 제한)
-        thread_id=thread.id,
+        thread_id=st.session_state.thread.id,
         assistant_id=assistant.id
     )
     ## run_id to filter
