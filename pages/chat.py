@@ -35,7 +35,7 @@ if prompt := st.chat_input("What is up?"):
     st.session_state.messages.append({"role": "user", "content": prompt}) 
 
     # 챗봇 대답
-    thread = client.beta.threads.create(
+    thread = st.session_state.client.beta.threads.create(
         messages=[
             {
                 "role": "user",
@@ -44,7 +44,7 @@ if prompt := st.chat_input("What is up?"):
             }
         ]
     )
-    run = client.beta.threads.runs.create_and_poll( # 1초에 1회 호출 (분당 100회 제한)
+    run = st.session_state.client.beta.threads.runs.create_and_poll( # 1초에 1회 호출 (분당 100회 제한)
         thread_id=thread.id,
         assistant_id=st.session_state.assistant.id
     )
