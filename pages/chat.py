@@ -37,21 +37,23 @@ if prompt := st.chat_input("What is up?"):
     st.session_state.messages.append({"role": "user", "content": prompt}) 
 
     # 챗봇 대답
-    thread = st.session_state.client.beta.threads.create(
-        messages=[
-            {
-                "role": "user",
-                "content": prompt,
-                #"attachments": [{"file_id": message_file.id, "tools":[{"type":"file_search"}]]
-            }
-        ]
-    )
+    if "thread" not in st.session_state: 
+        st.session_state.thread = st.session_state.client.beta.threads.create(
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt,
+                    #"attachments": [{"file_id": message_file.id, "tools":[{"type":"file_search"}]]
+                }
+            ]
+        )
+
     run = st.session_state.client.beta.threads.runs.create_and_poll( # 1초에 1회 호출 (분당 100회 제한)
-        thread_id=thread.id,
+        thread_id=st.session_state.thread.id,
         assistant_id=st.session_state.assistant.id
     )
     ## run_id to filter
-    thread_messages = st.session_state.client.beta.threads.messages.list(thread.id, run_id=run.id)
+    thread_messages = st.session_state.client.beta.threads.messages.list(st.session_state.thread.id, run_id=run.id)
 
     # Assistant API Thread의 마지막 Message 가져오는 기능 추가 필요     
     response = f"Echo: {thread_messages.data[0].content[0].text.value}" 
