@@ -84,8 +84,8 @@ if prompt := st.chat_input("What is up?"):
         assistant_id=st.session_state.assistant.id
     )
 
-    run_check = client.beta.threads.runs.retrieve(
-      thread_id=thread.id,
+    run_check = st.session_state.client.beta.threads.runs.retrieve(
+      thread_id=st.session_state.thread.id,
       run_id=run.id
     )
     if run_check.status == 'requires_action':
@@ -102,8 +102,8 @@ if prompt := st.chat_input("What is up?"):
                     "output":str(output)
                 }
             )
-        run = client.beta.threads.runs.submit_tool_outputs(
-            thread_id=thread.id,
+        run = st.session_state.client.beta.threads.runs.submit_tool_outputs(
+            thread_id=st.session_state.thread.id,
             run_id=run.id,
             tool_outputs=tool_outputs
         )
