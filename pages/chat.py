@@ -93,15 +93,15 @@ if prompt := st.chat_input("What is up?"):
 
         tool_outputs = []
         for tool in tool_calls:
-        func_name = tool.function.name
-        kwargs = json.loads(tool.function.arguments)
-        output = func(**kwargs)
-        tool_outputs.append(
-            {
-                "tool_call_id":tool.id,
-                "output":str(output)
-            }
-        )
+            func_name = tool.function.name
+            kwargs = json.loads(tool.function.arguments)
+            output = func(**kwargs)
+            tool_outputs.append(
+                {
+                    "tool_call_id":tool.id,
+                    "output":str(output)
+                }
+            )
         run = client.beta.threads.runs.submit_tool_outputs(
             thread_id=thread.id,
             run_id=run.id,
