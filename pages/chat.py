@@ -49,7 +49,7 @@ if prompt := st.chat_input("What is up?"):
         assistant_id=st.session_state.assistant.id
     )
     ## run_id to filter
-    thread_messages = client.beta.threads.messages.list(thread.id, run_id=run.id)
+    thread_messages = st.session_state.client.beta.threads.messages.list(thread.id, run_id=run.id)
 
     # Assistant API Thread의 마지막 Message 가져오는 기능 추가 필요     
     response = f"Echo: {thread_messages.data[0].content[0].text.value}" 
