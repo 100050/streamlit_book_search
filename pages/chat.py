@@ -40,7 +40,7 @@ if "messages" not in st.session_state:
 
 for msg in st.session_state.messages:     
     with st.chat_message(msg["role"]):
-        if "PIL" in msg["content"]:
+        if  isinstance(msg["content"], "asf"):
             st.image(msg["content"], use_column_width=True)
         else:         
             st.markdown(msg["content"])
