@@ -7,6 +7,18 @@ st.session_state.key = st.text_input("key", value=st.session_state.get("key", ""
 st.session_state.client = OpenAI(api_key=st.session_state.key)
 st.header("챗봇")
 
+@st.cache_data
+def func(prompt):
+    client = OpenAI(api_key=st.session_state.key)
+    response = client.images.generate(model="dall-e-3",prompt=prompt)
+    image_url = response.data[0].url
+    urllib.request.urlretrieve(image_url, 'img.png')
+    img = Image.open("img.png")
+    st.image(img, use_column_width=True)
+
+
+
+
 if st.button("Clear") and "thread" in st.session_state:
     del st.session_state.messages
     st.session_state.client.beta.threads.delete(st.session_state.thread.id)
@@ -30,7 +42,23 @@ if prompt := st.chat_input("What is up?"):
     if "assistant" not in st.session_state:  
         st.session_state.assistant = st.session_state.client.beta.assistants.create(
             instructions="챗봇입니다",
-            model="gpt-4o"
+            model="gpt-4o",
+            tools=st.session_state.tools = [
+                {
+                    "type":"function",
+                    "function": {
+                        "name":"func",
+                        "description":"dall-e를 이용해 받은 프롬포트를 바탕으로 그림을 그린다.",
+                        "parameters": {
+                            "type":"object",
+                            "properties": {
+                                "prompt": {"type":"string", "description":"프롬포트"}
+                            }
+                        }
+                    }
+                },
+                {"type": "code_interpreter"}
+            ]
         )
 
     # 사용자 메시지 보여주기 
