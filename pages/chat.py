@@ -100,7 +100,7 @@ if prompt := st.chat_input("What is up?"):
             tool_outputs.append(
                 {
                     "tool_call_id":tool.id,
-                    "output":str(output)r
+                    "output":str(output)
                 }
             )
         run = st.session_state.client.beta.threads.runs.submit_tool_outputs(
