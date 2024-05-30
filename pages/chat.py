@@ -15,7 +15,10 @@ def func(prompt):
     image_url = response.data[0].url
     urllib.request.urlretrieve(image_url, 'img.png')
     img = Image.open("img.png")
-    st.image(img, use_column_width=True)
+    with st.chat_message("assistant"):      
+        st.image(img, use_column_width=True)
+        # 메모리에 LLM 응답 저장     
+        st.session_state.messages.append({"role": "assistant", "content": img})
 
 
 
