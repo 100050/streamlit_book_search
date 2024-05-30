@@ -113,7 +113,7 @@ if prompt := st.chat_input("What is up?"):
     thread_messages = st.session_state.client.beta.threads.messages.list(st.session_state.thread.id, run_id=run.id)
 
     # Assistant API Thread의 마지막 Message 가져오는 기능 추가 필요     
-    response = f"Echo: {thread_messages.data[0].content[0].text.value}" 
+    response = f"Echo: {thread_messages.data}" 
 
     # LLM 응답 보여주기     
     with st.chat_message("assistant"): 
