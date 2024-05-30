@@ -6,8 +6,6 @@ from PIL import Image
 st.session_state.key = st.text_input("key", value=st.session_state.get("key", ""), type="password")
 st.header("챗봇")
 
-
-
 if st.button("Clear") and "thread" in st.session_state:
     client.beta.threads.delete(st.session_state.thread.id)
 
@@ -24,9 +22,10 @@ for msg in st.session_state.messages:
 
 if prompt := st.chat_input("What is up?"): 
     if "assistant" not in st.session_state:  
+        client = OpenAI(api_key=st.session_state.key)
         st.session_state.assistant = client.beta.assistants.create(
-        instructions="챗봇입니다",
-        model="gpt-4o"
+            instructions="챗봇입니다",
+            model="gpt-4o"
         )
 
     # 사용자 메시지 보여주기 
