@@ -39,8 +39,11 @@ if "messages" not in st.session_state:
     st.session_state.messages = [] 
 
 for msg in st.session_state.messages:     
-    with st.chat_message(msg["role"]):         
-        st.markdown(msg["content"])
+    with st.chat_message(msg["role"]):
+        if "PIL" in msg["content"]:
+            st.image(msg["content"], use_column_width=True)
+        else:         
+            st.markdown(msg["content"])
 
 if prompt := st.chat_input("What is up?"): 
     if "assistant" not in st.session_state:  
