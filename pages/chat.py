@@ -83,6 +83,31 @@ if prompt := st.chat_input("What is up?"):
         thread_id=st.session_state.thread.id,
         assistant_id=st.session_state.assistant.id
     )
+
+    run_check = client.beta.threads.runs.retrieve(
+      thread_id=thread.id,
+      run_id=run.id
+    )
+    if run_check.status == 'requires_action':
+        tool_calls = run_check.required_action.submit_tool_outputs.tool_calls
+
+        tool_outputs = []
+        for tool in tool_calls:
+        func_name = tool.function.name
+        kwargs = json.loads(tool.function.arguments)
+        output = func(**kwargs)
+        tool_outputs.append(
+            {
+                "tool_call_id":tool.id,
+                "output":str(output)
+            }
+        )
+        run = client.beta.threads.runs.submit_tool_outputs(
+            thread_id=thread.id,
+            run_id=run.id,
+            tool_outputs=tool_outputs
+        )
+
     ## run_id to filter
     thread_messages = st.session_state.client.beta.threads.messages.list(st.session_state.thread.id, run_id=run.id)
 
