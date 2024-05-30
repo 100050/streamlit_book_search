@@ -35,16 +35,15 @@ if prompt := st.chat_input("What is up?"):
     st.session_state.messages.append({"role": "user", "content": prompt}) 
 
     # 챗봇 대답
-    if "thread" not in st.session_state: 
-        thread = client.beta.threads.create(
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt,
-                    #"attachments": [{"file_id": message_file.id, "tools":[{"type":"file_search"}]]
-                }
-            ]
-        )
+    thread = client.beta.threads.create(
+        messages=[
+            {
+                "role": "user",
+                "content": prompt,
+                #"attachments": [{"file_id": message_file.id, "tools":[{"type":"file_search"}]]
+            }
+        ]
+    )
     run = client.beta.threads.runs.create_and_poll( # 1초에 1회 호출 (분당 100회 제한)
         thread_id=st.session_state.thread.id,
         assistant_id=assistant.id
