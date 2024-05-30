@@ -2,6 +2,7 @@ import streamlit as st
 from openai import OpenAI
 import urllib.request
 from PIL import Image
+import json
 
 st.session_state.key = st.text_input("key", value=st.session_state.get("key", ""), type="password")
 st.session_state.client = OpenAI(api_key=st.session_state.key)
