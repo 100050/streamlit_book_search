@@ -43,7 +43,7 @@ if prompt := st.chat_input("What is up?"):
         st.session_state.assistant = st.session_state.client.beta.assistants.create(
             instructions="챗봇입니다",
             model="gpt-4o",
-            tools=st.session_state.tools = [
+            tools=[
                 {
                     "type":"function",
                     "function": {
