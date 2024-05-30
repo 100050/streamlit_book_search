@@ -4,14 +4,15 @@ import urllib.request
 from PIL import Image
 
 st.session_state.key = st.text_input("key", value=st.session_state.get("key", ""), type="password")
+st.session_state.client = OpenAI(api_key=st.session_state.key)
 st.header("챗봇")
 
 if st.button("Clear") and "thread" in st.session_state:
-    client.beta.threads.delete(st.session_state.thread.id)
+    st.session_state.client.beta.threads.delete(st.session_state.thread.id)
 
 if st.button("대화창 나가기") and "thread" in st.session_state and "assistant" in st.session_state:
-    client.beta.threads.delete(st.session_state.thread.id)
-    response = client.beta.assistants.delete(st.session_state.assistant.id)
+    st.session_state.client.beta.threads.delete(st.session_state.thread.id)
+    response = st.session_state.client.beta.assistants.delete(st.session_state.assistant.id)
 
 if "messages" not in st.session_state:     
     st.session_state.messages = [] 
@@ -22,8 +23,7 @@ for msg in st.session_state.messages:
 
 if prompt := st.chat_input("What is up?"): 
     if "assistant" not in st.session_state:  
-        client = OpenAI(api_key=st.session_state.key)
-        st.session_state.assistant = client.beta.assistants.create(
+        st.session_state.assistant = st.session_state.client.beta.assistants.create(
             instructions="챗봇입니다",
             model="gpt-4o"
         )
