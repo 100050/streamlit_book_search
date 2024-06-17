@@ -106,13 +106,13 @@ if data:
         books = list(set(books) & set(titles))
         if books != []:
             for book in books:
-                st.write(f"**제목: {book}**")
+                st.markdown(f"###제목: {book}")
                 if isSummary == True:
-                    st.write('- 내용 요약')
+                    st.markdown('- 내용 요약')
                     index = titles.index(book)
                     with st.spinner('요약 중 ...'):
                         summary = get_summary(tocs[index])
-                    st.write(summary)
+                    st.markdown(summary)
                 
             st.subheader('상세 내용')
             for book in books:
