@@ -83,11 +83,11 @@ if data:
         
         return recommended_books
 
-    def get_summary(introduce):
+    def get_summary(toc):
         response = client.chat.completions.create(
             model="gpt-4o",
             messages=[
-                {"role": "user", "content": f"아래의 소개글을 요약해줘.\n{introduce}"}
+                {"role": "user", "content": f"아래의 소개글을 요약해줘.\n{toc}"}
             ]
         )
 
@@ -113,7 +113,7 @@ if data:
                     st.write('내용 요약')
                     index = titles.index(book)
                     with st.spinner('요약 중 ...'):
-                        summary = get_summary(introduces[index])
+                        summary = get_summary(tocs[index])
                     st.write(summary)
                 
             st.subheader('상세 내용')
