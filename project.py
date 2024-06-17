@@ -84,7 +84,7 @@ if data:
         return recommended_books
 
     def get_summary(introduce):
-        client.chat.completions.create_and_poll(
+        client.chat.completions.create(
             model="gpt-4o",
             messages=[
                 {"role": "user", "content": f"아래의 소개글을 요약해줘.\n{introduce}"}
