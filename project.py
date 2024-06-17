@@ -40,7 +40,7 @@ if data:
             files=[file_streams]
         )
 
-        Prompt = "입력 내용과 유사한 책을 첨부 파일에서 찾아서 그 책의 제목을 쉼표로 구분해서 출력하세요. \n\n입력:"
+        Prompt = "입력 내용과 유사한 책의 제목을 첨부 파일에서 찾아서 쉼표로 구분해서 출력하세요. \n\n입력:"
         #Prompt = "입력 내용과 유사한 책을 첨부 파일에서 찾아서 title과 전체 내용을 요약해서 출력해 \n출력 예: 제목:title \n -내용:...  \n\n입력: "
 
         assistant = client.beta.assistants.create(
