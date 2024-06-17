@@ -104,7 +104,7 @@ if data:
         st.write(f"'{search_title}'에 대한 검색 결과:")
         
         books = list(set(books) & set(titles))
-        if books != None:
+        if books != []:
             for book in books:
                 st.write('제목')
                 st.write(book)
