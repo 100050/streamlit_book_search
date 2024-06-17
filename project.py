@@ -28,22 +28,36 @@ if data:
     def get_similar_books(input):
         # 파일
         vector_store = client.beta.vector_stores.create(name="BOOK")
-
+    
         file_streams = []
-        for i in range(100):
+        for i in range(50):
             file_streams.append(open(f"books/book{i+1}.json", "rb"))
-
+    
         file_batch = client.beta.vector_stores.file_batches.upload_and_poll(
             vector_store_id=vector_store.id,
             files=file_streams
         )
-
-        Prompt = "첨부 파일에서 입력 내용이나 그 내용과 유사한 내용을 설명하는 책을 찾고, 그 책의 title을 csv형식으로 구분자는 '\\n'으로 하고 출력하세요. \n\n입력: "
-        #Prompt = "입력 내용과 유사한 책을 첨부 파일에서 찾아서 title과 전체 내용을 요약해서 출력해 \n출력 예: 제목:title \n -내용:...  \n\n입력: "
-
+    
+        Prompt = f'''
+        다음 작업을 수행하시오.
+        1. 첨부 파일에서 세 개의 역따옴표로 구분된 입력 내용과 연관이 있는 내용이 담긴 책을 찾는다.
+        2. 1에서 찾은 책의 title을 csv형식으로 구분자는 '\\n'으로 하고 출력하세요.
+        
+        출력시 출처는 포함하지 마세요.
+        
+        다음 형식으로 출력하시오.
+        title1
+        title2
+        title3
+        
+    
+    
+        입력:
+        ```{input}```
+        '''
+        
         assistant = client.beta.assistants.create(
             instructions= '당신은 사서입니다. 첨부 파일의 정보를 이용해 응답하세요.',
-            top_p=0.8,
             model="gpt-4o",
             tools=[{"type": "file_search"}],
             tool_resources={
@@ -52,7 +66,7 @@ if data:
                 }
             }
         )
-
+    
         #thread
         thread = client.beta.threads.create(
             messages=[
@@ -62,24 +76,25 @@ if data:
                 }
             ]
         )
-
+        # 12초
         run = client.beta.threads.runs.create_and_poll( # 1초에 1회 호출 (분당 100회 제한)
             thread_id=thread.id,
             assistant_id=assistant.id
         )
-
+    
         # message
         thread_messages = client.beta.threads.messages.list(thread.id, run_id=run.id)
         recommended_books = thread_messages.data[0].content[0].text.value
         # delete thread
         response = client.beta.threads.delete(thread.id)
-
+    
         # delete assistant
         response = client.beta.assistants.delete(assistant.id)
-
+    
         # delete vector store
         response = client.beta.vector_stores.delete(vector_store.id)
-
+    
+        # delete files
         response = client.files.list(purpose="assistants")
         for file in response.data:
             try:
