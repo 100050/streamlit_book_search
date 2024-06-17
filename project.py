@@ -13,8 +13,6 @@ def load_data(file_path):
         st.error("JSON 파일을 읽는 중 오류가 발생했습니다.")
         return None
 
-
-
 data = load_data('book100.json')
 
 if data:
@@ -28,15 +26,16 @@ if data:
     client = OpenAI(api_key=key)
 
     def get_similar_books(input):
-    # 파일
+        # 파일
         vector_store = client.beta.vector_stores.create(name="BOOK")
 
-        path = './book100_toc.json'
-        file_streams = open(path, "rb")
+        file_streams = []
+        for i in range(100):
+            file_streams.append(open(f"books/book{i+1}.json", "rb"))
 
         file_batch = client.beta.vector_stores.file_batches.upload_and_poll(
             vector_store_id=vector_store.id,
-            files=[file_streams]
+            files=file_streams
         )
 
         Prompt = "첨부 파일에서 입력 내용과 유사한 책을 찾고, 그 책의 title을 csv형식으로 구분자는 '\\n'으로 하고 출력하세요. \n\n입력: "
@@ -79,6 +78,10 @@ if data:
 
         # delete vector store
         response = client.beta.vector_stores.delete(vector_store.id)
+
+        response = client.files.list(purpose="assistants")
+        for file in response.data:
+            client.files.delete(file.id)
         
         return recommended_books
 
@@ -120,10 +123,12 @@ if data:
                 index = titles.index(book)
                 with st.expander(book):
                     st.write("**소개**")
-                    st.write(introduces[index] if introduces[index] != ' ' else "소개 정보가 없습니다.")
+                    st.write(introduces[index] if introduces[index] != '' else "소개 정보가 없습니다.")
                     st.write("**목차**")
-                    st.write(tocs[index] if tocs[index] != ' ' else "목차 정보가 없습니다.")
+                    st.write(tocs[index] if tocs[index] != '' else "목차 정보가 없습니다.")
         else:
             st.write('검색 결과가 없습니다. 다시 검색해주세요.')
+
+        
 else:
     st.error("도서 데이터를 불러오는 중 문제가 발생했습니다.")
