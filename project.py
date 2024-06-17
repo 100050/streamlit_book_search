@@ -83,6 +83,8 @@ if data:
         for file in response.data:
             try:
                 client.files.delete(file.id)
+            except:
+                pass
         
         return recommended_books
 
