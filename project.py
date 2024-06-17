@@ -83,26 +83,49 @@ if data:
         
         return recommended_books
 
-    st.header("도서 검색")
+    def get_summary(introduce):
+        client.chat.completions.create_and_poll(
+            model="gpt-4o",
+            messages=[
+                {"role": "user", "content": f"아래의 소개글을 요약해줘.\n{introduce}"}
+            ]
+        )
+
+        return summary
+
+    st.header("도서 검색")  
+    isSummary = st.checkbox("도서 요약(느림)")
     search_title = st.text_input("도서 제목 혹은 도서의 내용을 입력하세요:")
 
-    st.write(f"'{search_title}'에 대한 검색 결과:")
     if st.button("검색하기"):
         book = get_similar_books(search_title)
         books = book.split('\n')
-        
-        
 
-        st.subheader('상세 내용')
-        for book in books:
-            index = titles.index(book)
-            with st.expander(book):
-                st.write("**소개**")
-                st.write(introduces[index] if introduces[index] == '' else "소개 정보가 없습니다.")
-                st.write("**목차**")
-                st.write(tocs[index] if tocs[index] == '' else "목차 정보가 없습니다.")
-                st.write("**출판사 리뷰**")
-                st.write(pub_reviews[index] if pub_reviews[index] == '' else "출판사 리뷰 정보가 없습니다.")
+        st.write(f"'{search_title}'에 대한 검색 결과:")
+        
+        books = list(set(books) & set(titles))
+        if books != None:
+            for book in books:
+                st.write('제목')
+                st.write(book)
+                if isSummary == True:
+                    st.write('내용 요약')
+                    index = titles.index(book)
+                    summary = get_summary(introduce[index])
+                    st.write(summary)
+                
+            st.subheader('상세 내용')
+            for book in books:
+                index = titles.index(book)
+                with st.expander(book):
+                    st.write("**소개**")
+                    st.write(introduces[index] if introduces[index] == '' else "소개 정보가 없습니다.")
+                    st.write("**목차**")
+                    st.write(tocs[index] if tocs[index] == '' else "목차 정보가 없습니다.")
+                    st.write("**출판사 리뷰**")
+                    st.write(pub_reviews[index] if pub_reviews[index] == '' else "출판사 리뷰 정보가 없습니다.")
+        else:
+            st.write('검색 결과가 없습니다. 다시 검색해주세요.')
             
         # st.write(book)
         # if matching_titles:
