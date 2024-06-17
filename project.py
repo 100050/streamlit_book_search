@@ -38,7 +38,7 @@ if data:
             files=file_streams
         )
 
-        Prompt = "첨부 파일에서 첨부 파일의 내용과 입력 내용이 유사한 책을 찾고, 그 책의 title을 csv형식으로 구분자는 '\\n'으로 하고 출력하세요. \n\n입력: "
+        Prompt = "첨부 파일에서 입력 내용에 대해 설명하는 책을 찾고, 그 책의 title을 csv형식으로 구분자는 '\\n'으로 하고 출력하세요. \n\n입력: "
         #Prompt = "입력 내용과 유사한 책을 첨부 파일에서 찾아서 title과 전체 내용을 요약해서 출력해 \n출력 예: 제목:title \n -내용:...  \n\n입력: "
 
         assistant = client.beta.assistants.create(
@@ -88,19 +88,7 @@ if data:
         
         return recommended_books
 
-    @st.cache_data
-    def get_summary(toc):
-        response = client.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {"role": "user", "content": f"아래의 목차를 요약해줘.\n{toc}"}
-            ]
-        )
-
-        return response.choices[0].message.content
-
     st.header("도서 검색")  
-    isSummary = st.checkbox("도서 요약(느림)")
     search_title = st.text_input("도서 제목 혹은 도서의 내용을 입력하세요:")
 
     if st.button("검색하기"):
@@ -112,16 +100,6 @@ if data:
         
         books = list(set(books) & set(titles))
         if books != []:
-            for book in books:
-                st.write(f"제목: {book}")
-                if isSummary == True:
-                    st.write('# 내용 요약')
-                    index = titles.index(book)
-                    with st.spinner('요약 중 ...'):
-                        summary = get_summary(tocs[index])
-                    st.write(summary)
-                
-            st.subheader('상세 내용')
             for book in books:
                 index = titles.index(book)
                 with st.expander(book):
