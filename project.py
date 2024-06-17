@@ -82,6 +82,7 @@ if data:
         
         return recommended_books
 
+    @st.cache_data
     def get_summary(toc):
         response = client.chat.completions.create(
             model="gpt-4o",
@@ -106,13 +107,13 @@ if data:
         books = list(set(books) & set(titles))
         if books != []:
             for book in books:
-                st.markdown(f"###제목: {book}")
+                st.write(f"제목: {book}")
                 if isSummary == True:
-                    st.markdown('- 내용 요약')
+                    st.write('# 내용 요약')
                     index = titles.index(book)
                     with st.spinner('요약 중 ...'):
                         summary = get_summary(tocs[index])
-                    st.markdown(summary)
+                    st.write(summary)
                 
             st.subheader('상세 내용')
             for book in books:
