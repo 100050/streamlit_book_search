@@ -85,10 +85,26 @@ if data:
 
     st.header("도서 검색")
     search_title = st.text_input("도서 제목 혹은 도서의 내용을 입력하세요:")
+
+    st.write(f"'{search_title}'에 대한 검색 결과:")
     if st.button("검색하기"):
         book = get_similar_books(search_title)
-        matching_titles = [title for title in titles if search_title.lower() in title.lower()]
-        st.write(book)
+        books = book.split('\n')
+        
+        
+
+        st.subheader('상세 내용')
+        for book in books:
+            index = titles.index(book)
+            with st.expander(book):
+                st.write("**소개**")
+                st.write(introduces[index] if introduces[index] == '' else "소개 정보가 없습니다.")
+                st.write("**목차**")
+                st.write(tocs[index] if tocs[index] == '' else "목차 정보가 없습니다.")
+                st.write("**출판사 리뷰**")
+                st.write(pub_reviews[index] if pub_reviews[index] == '' else "출판사 리뷰 정보가 없습니다.")
+            
+        # st.write(book)
         # if matching_titles:
         #     st.write(f"'{search_title}'에 대한 검색 결과:")
         #     for title in matching_titles:
