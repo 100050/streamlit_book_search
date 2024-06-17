@@ -15,7 +15,7 @@ def load_data(file_path):
 
 
 
-data = load_data('book20.json')
+data = load_data('book100.json')
 
 if data:
     titles = data.get('title', [])
@@ -32,7 +32,7 @@ if data:
     # 파일
         vector_store = client.beta.vector_stores.create(name="BOOK")
 
-        path = './book20_toc.json'
+        path = './book100_toc.json'
         file_streams = open(path, "rb")
 
         file_batch = client.beta.vector_stores.file_batches.upload_and_poll(
@@ -40,7 +40,8 @@ if data:
             files=[file_streams]
         )
 
-        Prompt = "입력 내용과 유사한 책을 첨부 파일에서 찾아서 title과 전체 내용을 요약해서 출력해 \n출력 예: 제목:title \n -내용:...  \n\n입력: "
+        Prompt = "입력 내용과 유사한 책을 첨부 파일에서 찾아서 title만 출력하세요. \n 출력 예: title \n\n입력:"
+        #Prompt = "입력 내용과 유사한 책을 첨부 파일에서 찾아서 title과 전체 내용을 요약해서 출력해 \n출력 예: 제목:title \n -내용:...  \n\n입력: "
 
         assistant = client.beta.assistants.create(
             instructions= '당신은 사서입니다. 첨부 파일의 정보를 이용해 응답하세요.',
@@ -102,14 +103,14 @@ if data:
         # else:
         #     st.write(f"'{search_title}'에 대한 검색 결과가 없습니다.")
 
-    st.header("전체 도서 목록")
-    for i, title in enumerate(titles):
-        with st.expander(title):
-            st.write("**소개**")
-            st.write(introduces[i] if i < len(introduces) else "소개 정보가 없습니다.")
-            st.write("**목차**")
-            st.write(tocs[i] if i < len(tocs) else "목차 정보가 없습니다.")
-            st.write("**출판사 리뷰**")
-            st.write(pub_reviews[i] if i < len(pub_reviews) else "출판사 리뷰 정보가 없습니다.")
+    # st.header("전체 도서 목록")
+    # for i, title in enumerate(titles):
+    #     with st.expander(title):
+    #         st.write("**소개**")
+    #         st.write(introduces[i] if i < len(introduces) else "소개 정보가 없습니다.")
+    #         st.write("**목차**")
+    #         st.write(tocs[i] if i < len(tocs) else "목차 정보가 없습니다.")
+    #         st.write("**출판사 리뷰**")
+    #         st.write(pub_reviews[i] if i < len(pub_reviews) else "출판사 리뷰 정보가 없습니다.")
 else:
     st.error("도서 데이터를 불러오는 중 문제가 발생했습니다.")
