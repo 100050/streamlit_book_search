@@ -98,7 +98,8 @@ if data:
     search_title = st.text_input("도서 제목 혹은 도서의 내용을 입력하세요:")
 
     if st.button("검색하기"):
-        book = get_similar_books(search_title)
+        with st.spinner('검색 중 ...'):
+            book = get_similar_books(search_title)
         books = book.split('\n')
 
         st.write(f"'{search_title}'에 대한 검색 결과:")
@@ -111,7 +112,8 @@ if data:
                 if isSummary == True:
                     st.write('내용 요약')
                     index = titles.index(book)
-                    summary = get_summary(introduce[index])
+                    with st.spinner('요약 중 ...'):
+                        summary = get_summary(introduces[index])
                     st.write(summary)
                 
             st.subheader('상세 내용')
