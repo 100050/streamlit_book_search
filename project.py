@@ -119,9 +119,9 @@ if data:
                 index = titles.index(book)
                 with st.expander(book):
                     st.write("**소개**")
-                    st.write(introduces[index] if introduces[index] == ' ' else "소개 정보가 없습니다.")
+                    st.write(introduces[index] if introduces[index] != ' ' else "소개 정보가 없습니다.")
                     st.write("**목차**")
-                    st.write(tocs[index] if tocs[index] == ' ' else "목차 정보가 없습니다.")
+                    st.write(tocs[index] if tocs[index] != ' ' else "목차 정보가 없습니다.")
         else:
             st.write('검색 결과가 없습니다. 다시 검색해주세요.')
 else:
