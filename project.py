@@ -84,14 +84,14 @@ if data:
         return recommended_books
 
     def get_summary(introduce):
-        client.chat.completions.create(
+        response = client.chat.completions.create(
             model="gpt-4o",
             messages=[
                 {"role": "user", "content": f"아래의 소개글을 요약해줘.\n{introduce}"}
             ]
         )
 
-        return summary
+        return response.choices[0].message.content
 
     st.header("도서 검색")  
     isSummary = st.checkbox("도서 요약(느림)")
